@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>💈 صالون الحلاقة - حجز موعد</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest-client.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💈 صالون الحلاقة</h1>
+            <p>احجز موعدك بسهولة</p>
+        </header>
+
+        <div class="main-content single-column">
+            <!-- قسم حجز موعد للعملاء -->
+            <div class="card">
+                <h2>📅 حجز موعد جديد</h2>
+                <form id="appointmentForm">
+                    <div class="form-group">
+                        <label>اسمك الكريم:</label>
+                        <input type="text" id="clientName" required placeholder="أدخل اسمك">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>رقم الهاتف:</label>
+                        <input type="tel" id="clientPhone" required placeholder="05xxxxxxxx" pattern="[0-9]{10}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>اختر اليوم:</label>
+                        <div class="day-selector">
+                            <button type="button" class="day-btn" data-day="today">
+                                اليوم<br>
+                                <span id="todayDate"></span>
+                            </button>
+                            <button type="button" class="day-btn" data-day="tomorrow">
+                                غداً<br>
+                                <span id="tomorrowDate"></span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="selectedDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>نوع الخدمة:</label>
+                        <select id="serviceType" required>
+                            <option value="">اختر الخدمة</option>
+                            <option value="حلاقة شعر - 30 دقيقة">حلاقة شعر (30 دقيقة)</option>
+                            <option value="حلاقة ذقن - 20 دقيقة">حلاقة ذقن (20 دقيقة)</option>
+                            <option value="حلاقة كاملة - 45 دقيقة">حلاقة كاملة (45 دقيقة)</option>
+                            <option value="صبغة - 60 دقيقة">صبغة (60 دقيقة)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="timeSlotsSection" style="display: none;">
+                        <label>اختر الوقت المناسب:</label>
+                        <div id="timeSlots" class="time-slots"></div>
+                        <input type="hidden" id="selectedTime" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary" id="submitBtn" disabled>✅ تأكيد الحجز</button>
+                </form>
+            </div>
+
+            <!-- قسم إلغاء الموعد -->
+            <div class="card">
+                <h2>❌ إلغاء موعدك</h2>
+                <p style="font-size: 14px; color: #666; margin-bottom: 15px;">أدخل رقم هاتفك لإلغاء موعدك</p>
+                <div class="form-group">
+                    <input type="tel" id="cancelPhone" placeholder="05xxxxxxxx" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+                </div>
+                <button onclick="cancelMyAppointment()" class="btn-danger" style="width: 100%;">🔍 بحث وإلغاء الموعد</button>
+            </div>
+
+            <!-- قسم عرض مواعيدي -->
+            <div class="card">
+                <h2>📋 مواعيدي</h2>
+                <p style="font-size: 14px; color: #666; margin-bottom: 15px;">أدخل رقم هاتفك لعرض مواعيدك</p>
+                <div class="form-group">
+                    <input type="tel" id="viewPhone" placeholder="05xxxxxxxx" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+                </div>
+                <button onclick="viewMyAppointments()" class="btn-secondary" style="width: 100%;">👁️ عرض مواعيدي</button>
+                <div id="myAppointmentsList" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+
+        <footer style="text-align: center; margin-top: 30px; padding: 20px; background: white; border-radius: 15px;">
+            <p style="color: #666;">💈 صالون الحلاقة - تطبيق العملاء</p>
+            <p style="color: #999; font-size: 14px; margin-top: 10px;">للحلاقين: <a href="admin.html" style="color: #667eea;">لوحة الإدارة</a></p>
+        </footer>
+    </div>
+
+    <script src="script-client.js"></script>
+    <script>
+        // تسجيل Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        }
+    </script>
+</body>
+</html>

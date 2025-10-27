@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#764ba2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>💈 صالون الحلاقة - لوحة الإدارة</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest-admin.json">
+    <link rel="apple-touch-icon" href="icon-192-admin.png">
+</head>
+<body>
+    <div class="container">
+        <header style="background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); color: white;">
+            <h1>💼 لوحة إدارة الصالون</h1>
+            <p>خاصة بالحلاق فقط</p>
+        </header>
+
+        <!-- تسجيل الدخول -->
+        <div id="loginSection" class="main-content single-column">
+            <div class="card admin-card">
+                <h2>🔐 تسجيل الدخول</h2>
+                <p style="color: #856404; margin-bottom: 20px;">أدخل كلمة السر للدخول إلى لوحة الإدارة</p>
+                <div class="form-group">
+                    <input type="password" id="adminPassword" placeholder="كلمة السر" style="width: 100%; padding: 12px; border: 2px solid #ffc107; border-radius: 8px; font-size: 16px;">
+                </div>
+                <button onclick="loginAdmin()" class="btn-primary" style="width: 100%;">🔓 دخول</button>
+                <p style="margin-top: 15px; font-size: 14px; color: #999;">كلمة السر الافتراضية: <strong>1234</strong></p>
+            </div>
+        </div>
+
+        <!-- لوحة الإدارة الرئيسية -->
+        <div id="adminDashboard" style="display: none;">
+            <div class="admin-header">
+                <button onclick="logoutAdmin()" class="btn-danger">🚪 تسجيل خروج</button>
+            </div>
+
+            <div class="main-content">
+                <!-- المواعيد -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h2>📋 المواعيد المحجوزة</h2>
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="showAppointments('today')">اليوم</button>
+                        <button class="tab-btn" onclick="showAppointments('tomorrow')">غداً</button>
+                        <button class="tab-btn" onclick="showAppointments('all')">الكل</button>
+                    </div>
+                    <div id="appointmentsList"></div>
+                    <div class="stats" id="statsSection"></div>
+                </div>
+
+                <!-- إدارة المواعيد -->
+                <div class="card">
+                    <h2>⚙️ إدارة المواعيد</h2>
+                    <button onclick="adminDeleteAppointment()" class="btn-danger" style="width: 100%; margin-bottom: 10px;">
+                        ❌ إلغاء موعد معين
+                    </button>
+                    <button onclick="clearAllAppointments()" class="btn-danger" style="width: 100%; margin-bottom: 10px;">
+                        🗑️ حذف جميع المواعيد
+                    </button>
+                    <button onclick="exportAppointments()" class="btn-secondary" style="width: 100%;">
+                        📥 تصدير المواعيد
+                    </button>
+                </div>
+
+                <!-- الإعدادات -->
+                <div class="card">
+                    <h2>🔧 الإعدادات</h2>
+                    <button onclick="changePassword()" class="btn-secondary" style="width: 100%; margin-bottom: 10px;">
+                        🔑 تغيير كلمة السر
+                    </button>
+                    <button onclick="viewSettings()" class="btn-secondary" style="width: 100%;">
+                        ⚙️ إعدادات الصالون
+                    </button>
+                    
+                    <div id="settingsPanel" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px solid #ddd;">
+                        <h3 style="margin-bottom: 15px;">أوقات العمل</h3>
+                        <div class="form-group">
+                            <label>بداية العمل:</label>
+                            <input type="time" id="workStart" value="09:00" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <div class="form-group">
+                            <label>نهاية العمل:</label>
+                            <input type="time" id="workEnd" value="21:00" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <button onclick="saveSettings()" class="btn-primary" style="width: 100%;">💾 حفظ الإعدادات</button>
+                    </div>
+                </div>
+
+                <!-- الإحصائيات -->
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h2>📊 إحصائيات الصالون</h2>
+                    <div id="statistics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                        <!-- سيتم ملؤها ديناميكياً -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer style="text-align: center; margin-top: 30px; padding: 20px; background: white; border-radius: 15px;">
+            <p style="color: #666;">💼 لوحة إدارة الصالون</p>
+            <p style="color: #999; font-size: 14px; margin-top: 10px;">للعملاء: <a href="client.html" style="color: #667eea;">حجز موعد</a></p>
+        </footer>
+    </div>
+
+    <script src="script-admin.js"></script>
+    <script>
+        // تسجيل Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        }
+    </script>
+</body>
+</html>
